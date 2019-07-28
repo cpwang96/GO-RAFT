@@ -1,2 +1,2 @@
 # GO-RAFT
-A key-value store system with raft in GOLang.
+A key-value store system with raft in GoLang.
