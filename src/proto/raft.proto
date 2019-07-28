@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package proto;
+
+service Raft {
+    rpc AppendEntries(AERequest) returns (AEResponse) {}
+    rpc RequestVote(RVRequest) returns (RVResponse) {}
+}
+
+// You'll likely need to define more specific return codes than these!
+enum RaftReturnCode {
+    SUCCESS = 0;
+    FAILURE_TERM = 1;
+    FAILURE_PREVLOG = 2;
+}
+
+message Entry {
+    string op = 1;
+    string key = 2;
+    string val = 3;
+    int64 term = 4;
+}
+
+message AERequest {
+    int64 term = 1;
+    string leaderId = 2;
+    int64 prevLogIndex = 3;
+    int64 prevLogTerm = 4;
+    repeated Entry entries = 5;
+    int64 leaderCommit = 6;
+    int64 sender = 7;
+}
+
+
+
+message AEResponse {
+    int64 term = 1;
+    RaftReturnCode success = 2;
+}
+
+
+message RVRequest {
+    int64 term = 1;
+    string candidateID = 2;
+    int64 lastLogIndex = 3;
+    int64 lastLogTerm = 4;
+    int64 sender = 5;
+}
+
+message RVResponse {
+    int64 term = 1;
+    bool voteGranted = 2;
+}

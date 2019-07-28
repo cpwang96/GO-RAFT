@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package chaosmonkey;
+
+service ChaosMonkey {
+    rpc UploadMatrix(ConnMatrix) returns (Status) {}
+    rpc UpdateValue(MatValue) returns (Status) {}
+    rpc KillServer(ServerStat) returns (Status) {}
+    rpc Partition(PartitionInfo) returns (Status) {}
+}
+
+enum StatusCode {
+    OK = 0;
+    ERROR = 1;
+}
+message Server {
+    int32 serverID = 1;
+}
+
+message PartitionInfo {
+    repeated Server server = 1;
+}
+
+message Status {
+    StatusCode ret = 1;
+}
+
+message ConnMatrix {
+    message MatRow {
+        repeated float vals = 1;
+    }
+    repeated MatRow rows = 1;
+}
+
+message ServerStat {
+    int32 serverID = 1;
+}
+
+
+
+message MatValue {
+    int32 row = 1;
+    int32 col = 2;
+    float val = 3;
+}

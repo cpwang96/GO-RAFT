@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package proto;
+
+service KeyValueStore {
+    rpc Get(GetRequest) returns (GetResponse) {}
+    rpc Put(PutRequest) returns (PutResponse) {}
+    rpc IsLeader(CLRequest) returns (CLResponse) {}
+}
+
+// You'll likely need to define more specific return codes than these!
+enum ReturnCode {
+    SUCCESS = 0;
+    FAILURE_GET_NOKEY = 1;
+    FAILURE_GET_NOTLEADER = 2;
+    FAILURE_PUT = 3;
+    FAILURE_PUT_CANTPARSECLIENTIP = 4;
+}
+
+message GetRequest {
+    string key = 1;
+}
+
+message GetResponse {
+    string value = 1;
+    ReturnCode ret = 2;
+    int32 leaderID = 3;
+}
+
+message PutRequest {
+    string key = 1;
+    string value = 2;
+    int64 sequenceNo = 3;
+}
+
+message PutResponse {
+    ReturnCode ret = 1;
+    int32 leaderID = 2;
+}
+
+message CLRequest {
+}
+
+message CLResponse {
+    bool isLeader = 1;
+    int32 leaderId = 2;
+}
